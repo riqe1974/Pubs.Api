@@ -28,13 +28,11 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="Interfaces\" />
     <Folder Include="Mappings\" />
     <Folder Include="Extensions\" />
     <Folder Include="Middlewares\" />
     <Folder Include="Test\" />
     <Folder Include="Repository\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>
