@@ -1,0 +1,6 @@
+@Pubs.Api_HostAddress = http://localhost:5234
+
+GET {{Pubs.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
