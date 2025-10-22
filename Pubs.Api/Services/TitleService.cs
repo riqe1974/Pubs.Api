@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Pubs.Api.Data;
 using Pubs.Api.DTOs;
 using Pubs.Api.Models;
+using Pubs.API.Data;
 using Pubs.API.Interfaces;
 
 namespace Pubs.API.Services

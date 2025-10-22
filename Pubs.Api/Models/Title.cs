@@ -40,12 +40,12 @@ namespace Pubs.Api.Models
         public string? Notes { get; set; }
 
         [Column("pubdate")]
-        public DateTime PubDate { get; set; } = DateTime.Now;
+        public DateTime PubDate { get; set; } = DateTime.Now; //Obtém a data atual.
 
         [ForeignKey("PubId")]
         public virtual Publisher? Publisher { get; set; }
 
-        public virtual ICollection<Sale> Sales { get; set; } = new List<Sale>();
+        public virtual ICollection<Sale> Sales { get; set; } = [];
     }
 
 }

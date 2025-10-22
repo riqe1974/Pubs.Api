@@ -1,44 +1,57 @@
+
+using Pubs.Api.Extensions;
+using Pubs.Api.Filters;
+using Pubs.Api.Middlewares;
+using Pubs.API.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Configura os serviços.
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ApiExceptionFilterAttribute>();
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Configura as extensões
+builder.Services.ConfigureDbContext(builder.Configuration);
+builder.Services.ConfigureServices();
+builder.Services.ConfigureCors();
+
+// AutoMapper (mapeamento)
+builder.Services.AddAutoMapper(typeof(Program));
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configuração de Pipeline Htttp (Configura a documentação do Swagger).
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+app.UseCors("AllowAngular");
 app.UseHttpsRedirection();
+app.UseAuthorization();
+app.MapControllers();
 
-var summaries = new[]
+// Inicializa o BD
+using (var scope = app.Services.CreateScope())
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<PubsContext>();
+        context.Database.EnsureCreated();
+        Console.WriteLine("Database initialized successfully!");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Ocorreu um erro ao inicializar o banco de dados: {ex.Message}");
+    }
+}
 
 app.Run();
-
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

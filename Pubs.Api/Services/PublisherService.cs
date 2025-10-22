@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Pubs.Api.Data;
 using Pubs.Api.DTOs;
 using Pubs.Api.Models;
+using Pubs.API.Data;
 using Pubs.API.Interfaces;
 
 namespace Pubs.API.Services
@@ -105,7 +105,7 @@ namespace Pubs.API.Services
                     YtdSales = t.YtdSales,
                     Notes = t.Notes ?? string.Empty,
                     PubDate = t.PubDate,
-                    PublisherName = t.Publisher != null ? t.Publisher.PubName ?? "N/A" : "N/A" //Checkagem explicíta de nulo 
+                    PublisherName = t.Publisher != null ? t.Publisher.PubName ?? "N/A" : "N/A" //Checkagem explicíta de nulo, testar depois 
                 })
                 .ToListAsync();
         }

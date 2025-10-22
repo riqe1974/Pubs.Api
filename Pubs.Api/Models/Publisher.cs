@@ -9,7 +9,7 @@ namespace Pubs.Api.Models
         [Key]
         [Column("pub_id")]
         [StringLength(4)]
-        public string PubId { get; set; }
+        public string PubId { get; set; } = string.Empty; 
 
         [Column("pub_name")]
         [StringLength(40)]
@@ -27,6 +27,6 @@ namespace Pubs.Api.Models
         [StringLength(30)]
         public string? Country { get; set; }
 
-        public virtual ICollection<Title> Titles { get; set; } = new List<Title>();
+        public virtual ICollection<Title> Titles { get; set; } = [];
     }
 }
